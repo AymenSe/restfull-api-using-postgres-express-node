@@ -43,48 +43,36 @@ const updateStudent = (req, res) => {
   pool.query(queries.getStudentByID, [id], (error, results) => {
     // Check the student if does he exist or not !
     if (!results.rows.length) {
-      res
+      return res
         .status(404)
         .json({ msg: "The student does not exist on the database" });
     }
 
     const { name, email, age, dob } = req.body;
 
-    // if (name) {
-    //   res.json(name); // here !!
-    // }
-
     const logMsgs = [];
     if (name) {
-      console.log(queries.updateStudent.name);
       pool.query(queries.updateStudent.name, [name, id], (error, results) => {
         if (error) throw error;
-        logMsgs.push({ msg: "The name has been updated successfully!" });
       });
-      console.log(logMsgs);
     }
     if (email) {
       pool.query(queries.updateStudent.email, [email, id], (error, results) => {
         if (error) throw error;
-        logMsgs.push({ msg: "The email has been updated successfully!" });
       });
     }
     if (age) {
       pool.query(queries.updateStudent.age, [age, id], (error, results) => {
         if (error) throw error;
-        logMsgs.push({ msg: "The age has been updated successfully!" });
       });
     }
 
     if (dob) {
       pool.query(queries.updateStudent.dob, [dob, id], (error, results) => {
         if (error) throw error;
-        logMsgs.push({
-          msg: "The date of birth has been updated successfully!",
-        });
       });
     }
-    res.status(200).json(logMsgs);
+    res.status(200).json({ msg: "Updated successfully!" });
   });
 };
 
